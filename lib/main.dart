@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
+import 'package:provider/provider.dart';
 import 'home.dart';
+import 'model_theme.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,12 +13,25 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(statusBarColor: Colors.transparent));
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'ToDo App',
-      home: Home(),
+    return ChangeNotifierProvider(
+      create: (_) => ModelTheme(),
+      child: Consumer<ModelTheme>(
+          builder: (context, ModelTheme themeNotifier, child) {
+        return MaterialApp(
+          title: 'ToDo App',
+          theme: themeNotifier.isDark
+              ? ThemeData(
+                  brightness: Brightness.dark,
+                )
+              : ThemeData(
+                  brightness: Brightness.light,
+                  primaryColor: Colors.deepPurple,
+                  primarySwatch: Colors.deepPurple,
+                ),
+          debugShowCheckedModeBanner: false,
+          home: const Home(),
+        );
+      }),
     );
   }
 }
